@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "WebApi": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_urls": "http://*:5554",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
