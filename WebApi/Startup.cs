@@ -33,7 +33,7 @@ namespace WebApi
             {
                 options.Authority = Configuration.GetValue<string>("AuthenticationServerUrl");
                 options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Jwt;
-                options.RequireHttpsMetadata = false;
+                options.RequireHttpsMetadata = true;
                 options.LegacyAudienceValidation = false;
                 options.ApiName = Configuration.GetValue<string>("ApiName");
                 options.JwtBearerEvents = new JwtBearerEvents
@@ -50,6 +50,11 @@ namespace WebApi
                         .WithHeaders("*")
                         .WithMethods("*")
                         .AllowCredentials());
+            });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim("roles", "Admin"));
+                options.AddPolicy("User", policy => policy.RequireClaim("roles", "User"));
             });
             services.AddHttpContextAccessor();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -76,6 +81,7 @@ namespace WebApi
 
         private Task MessageReceivedAsync(MessageReceivedContext context)
         {
+            
             if (!context.Request.Headers.TryGetValue("Authorization", out var authHeaders) || StringValues.IsNullOrEmpty(authHeaders))
             {
                 return Task.CompletedTask;
