@@ -16,6 +16,7 @@ namespace WebApi
     public class Startup
     {
         private IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,6 +24,7 @@ namespace WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddAuthentication(options =>
             {
@@ -33,7 +35,8 @@ namespace WebApi
             {
                 options.Authority = Configuration.GetValue<string>("AuthenticationServerUrl");
                 options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Jwt;
-                options.RequireHttpsMetadata = true;
+                //options.RequireHttpsMetadata = true;
+                options.RequireHttpsMetadata = false;
                 options.LegacyAudienceValidation = false;
                 options.ApiName = Configuration.GetValue<string>("ApiName");
                 options.JwtBearerEvents = new JwtBearerEvents
