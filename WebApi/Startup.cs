@@ -38,7 +38,7 @@ namespace WebApi
                 //options.RequireHttpsMetadata = true;
                 options.RequireHttpsMetadata = false;
                 options.LegacyAudienceValidation = false;
-                options.ApiName = Configuration.GetValue<string>("ApiName");
+                options.ApiName = Configuration.GetValue<string>("ApiName");                
                 options.JwtBearerEvents = new JwtBearerEvents
                 {
                     OnMessageReceived = MessageReceivedAsync
