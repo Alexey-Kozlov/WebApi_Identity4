@@ -71,11 +71,11 @@ namespace WebApi
                 app.UseDeveloperExceptionPage();
             }
             app.UseStaticFiles();
-            app.UseCors("CorsPolicy");
-            app.UseSerilogRequestLogging();
             app.UseRouting();
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSerilogRequestLogging();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
