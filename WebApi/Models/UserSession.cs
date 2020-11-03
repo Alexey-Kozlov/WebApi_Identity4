@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WebApi.Logger;
 
 namespace WebApi.Models
 {

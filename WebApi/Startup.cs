@@ -10,6 +10,8 @@ using Microsoft.Extensions.Primitives;
 using System.IdentityModel.Tokens.Jwt;
 using WebApi.Services.Authentication;
 using WebApi.Repositories.Users;
+using WebApi.Logger;
+using WebApi.Filters;
 
 namespace WebApi
 {
@@ -24,7 +26,6 @@ namespace WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddAuthentication(options =>
             {
@@ -44,7 +45,11 @@ namespace WebApi
                     OnMessageReceived = MessageReceivedAsync
                 };
             });
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(p =>
+            {
+                p.Filters.Add(typeof(ControllerRequestActionLogger));
+                p.Filters.Add(typeof(ExceptionFilter));
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -62,6 +67,7 @@ namespace WebApi
             services.AddHttpContextAccessor();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IHttpLogHandlerService, HttpLogHandlerService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -76,6 +82,7 @@ namespace WebApi
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSerilogRequestLogging();
+            app.UseMiddleware<ControllerResponseActionLogger>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();

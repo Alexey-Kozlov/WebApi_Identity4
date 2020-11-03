@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.HttpSys;
 using System.IdentityModel.Tokens.Jwt;
+using WebApi.Filters;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -30,7 +32,7 @@ namespace WebApi.Controllers
         }
         [HttpGet("User")]
         [Authorize("User")]
-        public IActionResult GetUser()
+        public IActionResult GetUser([FromQuery]UserSession per)
         {
             var user = CurrentUser;
             return Ok(user.SessionId);

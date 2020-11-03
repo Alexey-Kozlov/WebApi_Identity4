@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
-
+using WebApi.Logger;
 
 namespace WebApi.Models
 {
+
 	public class PostResult<T>
 	{
 		public PostResult(long id, T request, string userMessage = "")
